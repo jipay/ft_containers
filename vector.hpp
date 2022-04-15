@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:38:18 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/14 20:09:35 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/15 19:53:14 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdexcept>
 # include "is_integral.hpp"
 # include "enable_if.hpp"
+# include "lexicographical_compare.hpp"`s
 
 namespace ft {
 	template <class T, class Allocator = std::allocator<T> >
@@ -69,9 +70,21 @@ namespace ft {
 				this->_allocator.deallocate(this->_datas, this->_capacity);
 			}
 			vector<T,Allocator>& operator=(const vector<T,Allocator>& x) {
+				/*
 				if (this != &x) {
 					this->assign(x.begin(), x.end());
 				}
+				return *this;
+				*/
+				this->clear();
+				this->_alloc.deallocate(this->_memory, this->_capacity);
+				this->_memory = NULL;
+				this->_size = x._size;
+				this->_capacity = (this->_capacity >= x._capacity) ? this->_capacity + 0 : x._capacity;
+				this->_alloc = x._alloc;
+				this->_memory = this->_allocator.allocate(this->_capacity);
+				for (size_type i = 0; i < this->_size; i++)
+					this->_allocator.construct(&this->_memory[i], x._memory[i]);
 				return *this;
 			}
 
@@ -302,13 +315,17 @@ namespace ft {
 		return true;
 	}
 	template <class T, class Allocator>
-	bool operator< (const vector<T,Allocator>& x, const vector<T,Allocator>& y);
+	bool operator< (const vector<T,Allocator>& x, const vector<T,Allocator>& y) {
+		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
+	}
 	template <class T, class Allocator>
 	bool operator!=(const vector<T,Allocator>& x, const vector<T,Allocator>& y) {
 		return (!(x == y));
 	}
 	template <class T, class Allocator>
-	bool operator> (const vector<T,Allocator>& x, const vector<T,Allocator>& y);
+	bool operator> (const vector<T,Allocator>& x, const vector<T,Allocator>& y) {
+		return (y < x);
+	}
 	template <class T, class Allocator>
 	bool operator>=(const vector<T,Allocator>& x, const vector<T,Allocator>& y) {
 		return (x == y || x > y);
