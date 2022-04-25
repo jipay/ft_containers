@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:38:18 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/15 19:53:14 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/25 15:50:33 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include <stdexcept>
 # include "is_integral.hpp"
 # include "enable_if.hpp"
-# include "lexicographical_compare.hpp"`s
+# include "lexicographical_compare.hpp"
+# include "iterator.hpp"
+# include "random_access_iterator.hpp"
+# include "reverse_iterator.hpp"
 
 namespace ft {
 	template <class T, class Allocator = std::allocator<T> >
@@ -34,18 +37,18 @@ namespace ft {
 
 		public:
 			// types:
-			typedef typename Allocator::reference reference;
-			typedef typename Allocator::const_reference const_reference;
-			typedef typename std::vector<T>::iterator iterator; // See 23.1
-			typedef typename std::vector<T>::const_iterator const_iterator; // See 23.1
-			typedef typename Allocator::size_type	size_type; // See 23.1
-			//typedef implementation defined difference_type;// See 23.1
-			typedef T value_type;
-			typedef Allocator allocator_type;
-			typedef typename Allocator::pointer pointer;
-			typedef typename Allocator::const_pointer const_pointer;
-			typedef std::reverse_iterator<iterator> reverse_iterator;
-			typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+			typedef typename Allocator::reference					reference;
+			typedef typename Allocator::const_reference				const_reference;
+			typedef typename ft::random_access_iterator<T>			iterator; // See 23.1
+			typedef typename ft::random_access_iterator<const T>	const_iterator; // See 23.1
+			typedef typename Allocator::size_type					size_type; // See 23.1
+			typedef typename Allocator::difference_type				difference_type;// See 23.1
+			typedef T												value_type;
+			typedef Allocator										allocator_type;
+			typedef typename Allocator::pointer						pointer;
+			typedef typename Allocator::const_pointer				const_pointer;
+			typedef ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 			// 23.2.4.1 construct/copy/destroy:
 			explicit vector(const Allocator& = Allocator()):_datas(0), _capacity(0), _size(0){}
