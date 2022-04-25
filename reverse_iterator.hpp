@@ -6,17 +6,18 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 16:00:05 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/18 17:59:38 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/25 00:18:38 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
 
+#include "iterator.hpp"
+
 namespace ft {
 	template <class Iterator>
-	class reverse_iterator : public
-		iterator<typename iterator_traits<Iterator>::iterator_category,
+	class reverse_iterator : public iterator<typename iterator_traits<Iterator>::iterator_category,
 		typename iterator_traits<Iterator>::value_type,
 		typename iterator_traits<Iterator>::difference_type,
 		typename iterator_traits<Iterator>::pointer,

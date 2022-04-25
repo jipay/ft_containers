@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 15:24:03 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/19 18:54:54 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/25 15:04:17 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define ITERATOR_HPP
 
 # include <cstddef>
+# include "is_integral.hpp"
+# include "enable_if.hpp"
 namespace ft {
 
 	// Standard iterator tags
@@ -58,6 +60,19 @@ namespace ft {
 		typedef Reference	reference;
 		typedef Category	iterator_category;
 	};
+
+	template <class InputIterator, class Distance>
+	void	advance(InputIterator &i, Distance n, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
+		i += n;
+	}
+
+	template <class InputIterator>
+	typename iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last) {
+		typename iterator_traits<InputIterator>::difference_type diff = 0;
+		for (; first != last; first++)
+			diff++;
+		return diff;
+	}
 }
 
 #endif
