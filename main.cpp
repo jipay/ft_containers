@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 15:28:54 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/14 14:53:35 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/25 17:27:18 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int main() {
 	std::cout << "Vector tests:\n" << std::endl;
 
-	
+	/*
 	std::cout << "std::vector<int>	first;" << std::endl;
 	std::vector<int>	first;
 	std::cout << "size: " << first.size() << " capacity: " << first.capacity() << " max size: " << first.max_size() << std::endl;
@@ -61,9 +61,9 @@ int main() {
 	std::cout << "third.push_back(42);" << std::endl;
 	third.push_back(42);
 	std::cout << "size: " << third.size() << " capacity: " << third.capacity() << " max size: " << third.max_size() << std::endl;
-	
+	*/
 
-	/*
+	
 	ft::vector<int> test1;
 	std::cout << "size: " << test1.size() << " capacity: " << test1.capacity() << " max size: " << test1.max_size() << std::endl;
 	ft::vector<int> test2 (4, 42);
@@ -72,6 +72,6 @@ int main() {
 	std::cout << "size: " << test3.size() << " capacity: " << test3.capacity() << " max size: " << test3.max_size() << std::endl;
 	test2.erase(test2.begin());
 	std::cout << "size: " << test2.size() << " capacity: " << test2.capacity() << " max size: " << test2.max_size() << std::endl;
-	*/
+	
 	return 0;
 }

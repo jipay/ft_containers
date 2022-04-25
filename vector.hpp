@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:38:18 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/25 15:50:33 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/25 18:46:52 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,22 +79,23 @@ namespace ft {
 				}
 				return *this;
 				*/
+
 				this->clear();
-				this->_alloc.deallocate(this->_memory, this->_capacity);
-				this->_memory = NULL;
+				this->_allocator.deallocate(this->_datas, this->_capacity);
+				this->_datas = NULL;
 				this->_size = x._size;
 				this->_capacity = (this->_capacity >= x._capacity) ? this->_capacity + 0 : x._capacity;
-				this->_alloc = x._alloc;
-				this->_memory = this->_allocator.allocate(this->_capacity);
+				this->_allocator = x._allocator;
+				this->_datas = this->_allocator.allocate(this->_capacity);
 				for (size_type i = 0; i < this->_size; i++)
-					this->_allocator.construct(&this->_memory[i], x._memory[i]);
+					this->_allocator.construct(&this->_datas[i], x._datas[i]);
 				return *this;
 			}
 
 			template <class InputIterator>
 			void assign(InputIterator first, InputIterator last) {
 				this->erase(this->begin(), this->end());
-				this->insert(first, last);
+				this->insert(this->begin(), first, last);
 			}
 			void assign(size_type n, const T& u) {
 				this->clear();
@@ -240,7 +241,7 @@ namespace ft {
 				}
 				//TODO : move element from to 'position' to this->end() to +n position
 				for (size_type i = 0; i < this->end() - position; i++) {
-					this->_allocator.construct(this->back() - i, *(position + (this->end() - position - 1) - i))
+					this->_allocator.construct(this->back() - i, *(position + (this->end() - position - 1) - i));
 				}
 				//TODO : erase element from 'position' to +n 'position'
 				//TODO : consctruct from 'position' to +n 'position' element x
@@ -262,10 +263,10 @@ namespace ft {
 					this->_capacity *= 2;
 				}
 				for (size_type i = 0; i < this->end() - position; i++) {
-					this->_allocator.construct(this->back() - i, *(position + (this->end() - position - 1) - i))
+					this->_allocator.construct(this->end() - i, *(position + (this->end() - position - 1) - i));
 				}
 				for (iterator it = position; it != position + n; it++, first++) {
-					this->_allocator.destroy(it);
+					//this->_allocator.destroy(it);
 					this->_allocator.construct(it, *first);
 				}
 			}
@@ -283,8 +284,8 @@ namespace ft {
 			}
 
 			iterator erase(iterator first, iterator last) {
-				for (iterator it = first; it < last; it++) {
-					this->_allocator.destroy(it);
+				for (long i = first - this->begin(); i < (first - this->begin() + (last - first)); i++) {
+					this->_allocator.destroy(this->_datas + i);
 				}
 				this->_size -= (last - first);
 				size_type i = first - this->begin();
@@ -309,8 +310,9 @@ namespace ft {
 	template <class T, class Allocator>
 	bool operator==(const vector<T,Allocator>& x, const vector<T,Allocator>& y) {
 		if (x.size() == y.size() && x.capacity() == y.capacity()) {
-			for (Allocator::size_type i = 0; i < x.size(); i++) {
-				if ()
+			for (typename Allocator::size_type i = 0; i < x.size(); i++) {
+				if ((x[i] != y[y]))
+					return false;
 			}
 		} else {
 			return false;
