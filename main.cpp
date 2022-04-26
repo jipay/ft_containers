@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 15:28:54 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/25 17:27:18 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/26 17:52:34 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <iostream>
 #include <vector>
 #include "vector.hpp"
+#include "test.hpp"
+
 
 int main() {
 	std::cout << "Vector tests:\n" << std::endl;
@@ -66,12 +68,25 @@ int main() {
 	
 	ft::vector<int> test1;
 	std::cout << "size: " << test1.size() << " capacity: " << test1.capacity() << " max size: " << test1.max_size() << std::endl;
-	ft::vector<int> test2 (4, 42);
+	ft::vector<int> test2 (10, 42);
 	std::cout << "size: " << test2.size() << " capacity: " << test2.capacity() << " max size: " << test2.max_size() << std::endl;
 	ft::vector<int> test3(test2.begin(), test2.end());
 	std::cout << "size: " << test3.size() << " capacity: " << test3.capacity() << " max size: " << test3.max_size() << std::endl;
-	test2.erase(test2.begin());
-	std::cout << "size: " << test2.size() << " capacity: " << test2.capacity() << " max size: " << test2.max_size() << std::endl;
-	
+	//test2.erase(test2.begin());
+	//std::cout << "size: " << test2.size() << " capacity: " << test2.capacity() << " max size: " << test2.max_size() << std::endl;
+	print_vector(test2);
+	test2.resize(20);
+	print_vector(test2);
+	std::cout << test2.front() << std::endl;
+	std::cout << test2.back() << std::endl;
+	try {
+		test2.at(42) = 42;
+	}
+	catch (std::out_of_range &e) {
+		std::cout << "Catch out_of_range exception!" << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << "Catch exception: " << e.what() << std::endl;
+	}
 	return 0;
 }

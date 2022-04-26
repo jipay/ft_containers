@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 17:38:18 by jdidier           #+#    #+#             */
-/*   Updated: 2022/04/25 18:46:52 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/04/26 20:17:40 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,11 @@ namespace ft {
 					this->_allocator.construct(this->_datas + i, *first);
 			}
 			
-			vector(const vector<T,Allocator>& x) {
-				*this = x;
+			vector(const vector<T,Allocator>& x): _capacity(x.capacity()), _size(x.size()) {
+				//*this = x;
+				this->_datas = this->_allocator.allocate(this->_capacity);
+				for (size_type i = 0; i < this->_size; i++)
+					this->_allocator.construct(&this->_datas[i], x[i]);
 			}
 			~vector() {
 				this->clear();
@@ -153,8 +156,9 @@ namespace ft {
 						}
 					}
 					for (; this->_size < sz; this->_size++)
-						this->_alloctor.construct(this->_memory + this->_size, c);
+						this->_allocator.construct(this->_datas + this->_size, c);
 				}
+				this->_size = sz;
 			}
 			
 			size_type capacity() const {
@@ -164,16 +168,23 @@ namespace ft {
 				return (this->_size > 0) ? false : true;
 			}
 			void reserve(size_type n) {
+
 				if (n > this->max_size())
 					throw std::length_error("vector::reserve");
-				T	*newDatas;
-				newDatas = this->_allocator.allocate(n);
-				for (iterator it = this->begin(); it != this->end(); it++)
-					this->_allocator.construct((newDatas + (it - this->begin())), *it);
-				this->clear();
-				this->_allocator.deallocate(this->_datas, this->_capacity);
-				this->_capacity = n;
-				this->_datas = newDatas;
+				if (n > this->capacity()) {
+					T	*newDatas;
+					newDatas = this->_allocator.allocate(n);
+					for (iterator it = this->begin(); it != this->end(); it++) {
+						this->_allocator.construct((newDatas + (it - this->begin())), *it);
+						//std::cout << "*it = " << *it << std::endl;
+						//std::cout << *(newDatas + (it - this->begin())) << std::endl;
+					}
+
+					//this->clear();
+					this->_allocator.deallocate(this->_datas, this->_capacity);
+					this->_capacity = n;
+					this->_datas = newDatas;
+				}
 			}
 
 			// element access:
@@ -213,7 +224,7 @@ namespace ft {
 			// 23.2.4.3 modifiers:
 			void push_back(const T& x)
 			{
-				if (this->size == this->_capacity)
+				if (this->_size == this->_capacity)
 				{
 					this->reserve(this->_capacity * 2);
 					this->_capacity *= 2;
