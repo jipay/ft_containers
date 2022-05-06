@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 21:07:16 by jdidier           #+#    #+#             */
-/*   Updated: 2022/05/04 14:21:39 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/05/06 20:13:20 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,19 @@ namespace ft {
 	template<class T>
 	class RBTIterator : public iterator<bidirectional_iterator_tag, T>
 	{
+		public:
+			typedef ft::Node<T>																	Node;
 		private:
 			Node	*_current;
+			Node	*_nil;
+
+			// TODO :: NIL BORDEL A COMPARER SINON NULL CA VA FOUTRE LA MERDE
 		public:
 			typedef typename ft::iterator<bidirectional_iterator_tag, T>::value_type			value_type;
 			typedef typename ft::iterator<bidirectional_iterator_tag, T>::difference_type		difference_type;
 			typedef typename ft::iterator<bidirectional_iterator_tag, T>::pointer				pointer;
 			typedef typename ft::iterator<bidirectional_iterator_tag, T>::reference				reference;
 			typedef typename ft::iterator<bidirectional_iterator_tag, T>::iterator_category		iterator_category;
-			typedef ft::Node<T>																	Node;
 			RBTIterator(void): _current(NULL) { }
 			explicit RBTIterator(Node const* n): _current(n) {}
 			RBTIterator(RBTIterator const& src) {
@@ -54,13 +58,45 @@ namespace ft {
 			pointer		operator->() const {
 				return &(operator*());
 			}
-			RBTIterator	&operator++();
+			RBTIterator	&operator++() {
+				if (this->_current->_child[RIGHT] != this->_nil) { 
+					this->_current = this->_current->_child[RIGHT];
+					while (this->_current && this->_current->_child[LEFT])
+						this->_current = this->_current->_child[LEFT];
+				} else {
+					Node *tmp = this->_current->_parent;
+					if (tmp->_child[RIGHT] == this->_current) {
+						while (tmp->_child[RIGHT] == this->_current) {
+							this->_current = tmp;
+							tmp = tmp->_parent;
+						}
+					}
+					if (this->_current != tmp)
+						this->_current = tmp;
+				}
+				return *this;
+			}
 			RBTIterator	operator++(int) {
 				RBTIterator tmp = *this;
 				operator++();
 				return tmp;
 			}
-			RBTIterator	&operator--();
+			RBTIterator	&operator--() {
+				if (this->_current->_parent->_parent == this->_current && this->_current->_color == RED)
+					this->_current = this->_current->_child[LEFT];
+				else if (this->_current->_child[LEFT]) {
+					while (this->_current->_child[RIGHT])
+						this->_current = this->_current->_child[RIGHT];
+				} else {
+					Node *parent = this->_current->_parent;
+					while (parent->_child[LEFT] == this->_current) {
+						this->_current = parent;
+						parent = parent->_parent;
+					}
+					this->_current = parent;
+				}
+				return *this;
+			}
 			RBTIterator	operator--(int) {
 				RBTIterator tmp = *this;
 				operator--();

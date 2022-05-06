@@ -6,7 +6,7 @@
 /*   By: jdidier <jdidier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 21:26:26 by jdidier           #+#    #+#             */
-/*   Updated: 2022/05/04 14:04:32 by jdidier          ###   ########.fr       */
+/*   Updated: 2022/05/05 11:52:48 by jdidier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ namespace ft {
 		~map();
 		map<Key,T,Compare,Allocator>		&operator=(const map<Key,T,Compare,Allocator>& x);
 		// iterators:
-		iterator							begin();
+		iterator							begin() {
+			
+		}
 		const_iterator						begin() const;
 		iterator							end();
 		const_iterator						end() const;
